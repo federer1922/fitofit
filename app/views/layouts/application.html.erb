@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>fitofit</title>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
+  </head>
+
+  <body>
+  <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+    <a class="navbar-brand" href="<%=  %>">fitofit</a>
+  </nav>
+  
+  <div class="container">
+  <div class="row">
+    <% if alert %>
+      <div class="alert alert-danger alert-dismissible fade show" role="alert">
+      <div class="text-dark"><%= alert %>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div> 
+      </div>
+    <% end %>   
+  </div>
+  </div>
+
+    <%= yield %>
+  </body>
+</html>

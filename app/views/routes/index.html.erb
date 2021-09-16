@@ -1,0 +1,47 @@
+<div class="container">
+  <div class="row">
+    <div class="col">
+      <form action="/create">
+        <div class="form-group">
+        <label for="starting_adress" class="font-weight-bold">Starting address</label>
+          <input type="text" class="form-control" name="starting_adress" placeholder="enter street, city, country">
+        <label for="destination_adress" <p class="font-weight-bold"></p>Destination address</label>
+          <input type="text" class="form-control" name="destination_adress" placeholder="enter street, city, country">
+        <p></p>
+        <button type="submit" style="float: right;" class="btn btn-primary">Submit</button>
+      </form>
+    </div>   
+  </div>
+</div>
+
+<p></p>
+
+<div class="container">
+  <div class="row">
+    <div class="col-sm-2">
+      <p class="font-weight-bold">Id</p>
+    </div>
+    <div class="col-sm-3">
+      <p class="font-weight-bold">Start</p>
+    </div>
+    <div class="col-sm-3">
+      <p class="font-weight-bold">Destination</p>
+    </div>
+  </div>
+</div>
+
+<div class="container"> 
+  <% @routes.each do |route| %>
+    <div class="row">
+      <div class="col-sm-2">
+        <%= route.id %>
+      </div>
+      <div class="col-sm-3">
+        <%= route.starting_adress %>
+      </div>
+      <div class="col-sm-3">
+        <%= route.destination_adress %>
+      </div>
+    </div>
+  <% end %>
+</div>

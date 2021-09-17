@@ -19,13 +19,16 @@
 <div class="container">
   <div class="row">
     <div class="col-sm-2">
-      <p class="font-weight-bold">Id</p>
+      <p class="font-weight-bold">Date</p>
     </div>
     <div class="col-sm-3">
       <p class="font-weight-bold">Start</p>
     </div>
     <div class="col-sm-3">
       <p class="font-weight-bold">Destination</p>
+    </div>
+    <div class="col-sm-3">
+      <p class="font-weight-bold">Distance</p>
     </div>
   </div>
 </div>
@@ -34,13 +37,16 @@
   <% @routes.each do |route| %>
     <div class="row">
       <div class="col-sm-2">
-        <%= route.id %>
+        <%= route.created_at.to_date %>
       </div>
       <div class="col-sm-3">
         <%= route.starting_adress %>
       </div>
       <div class="col-sm-3">
         <%= route.destination_adress %>
+      </div>
+       <div class="col-sm-3">
+        <%= route.distance %>
       </div>
     </div>
   <% end %>

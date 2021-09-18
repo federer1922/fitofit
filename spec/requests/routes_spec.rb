@@ -3,8 +3,12 @@ require "rails_helper"
 RSpec.describe Route, type: :request do
   let(:starting_adress) { "Aleje Solidarności 47, Poznań, Polska" }
   let(:destination_adress) { "Pleszewska 1, Poznań, Polska" }
+  let(:route_1) { FactoryBot.create(:route) }
+  let(:route_2) { FactoryBot.create(:route) }
+  let(:route_3) { FactoryBot.create(:route, created_at: Date.today.ago(1.month)) }
 
   before do
+    Geocoder.configure(:lookup => :test)
     Geocoder::Lookup::Test.add_stub(
       starting_adress, [
         {
@@ -47,7 +51,22 @@ RSpec.describe Route, type: :request do
   describe "GET /root" do
     it "renders a successful response" do
       get root_path
+
       expect(response).to be_successful
+    end
+
+    it "response has correct body" do
+      route_1; route_2; route_3
+      get root_path
+
+      expect(response.body).to include "10.0 km"
+      expect(response.body).to include "#{Date.today.strftime("%B %Y")}"
+    end
+
+    it "flash alert if no routes" do
+      get root_path
+
+      expect(flash[:alert]).to eq "No routes for this month"
     end
   end
 
@@ -66,7 +85,7 @@ RSpec.describe Route, type: :request do
     end
 
     context "with invalid parameters" do
-      it "does not create a new Restaurant" do
+      it "does not create a new Route" do
         expect {
           get create_path, params: { starting_adress: starting_adress, destination_adress: nil }
         }.to change(Route, :count).by(0)

@@ -16,6 +16,14 @@ class RoutesController < ApplicationController
   end
 
   def index
-    @routes = Route.all.order(:created_at)
+    @date_for_present_month = Date.today
+    first_date_for_month = @date_for_present_month.beginning_of_month
+    last_date_for_month = @date_for_present_month.end_of_month
+
+    routes = Route.where(created_at: first_date_for_month..last_date_for_month)
+    @routes = DayDistances.call(routes)
+    if @routes.count == 0
+      flash.now[:alert] = "No routes for this month" 
+    end
   end
 end

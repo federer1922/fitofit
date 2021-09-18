@@ -1,7 +1,8 @@
 require "rails_helper"
 
 RSpec.describe "calculate distance" do
-  it "calculate correct distance" do
+  Geocoder.configure(:lookup => :test)
+  it "calculates correct distance" do
 
     starting_adress = "Aleje Solidarności 47, Poznań, Polska"
     Geocoder::Lookup::Test.add_stub(

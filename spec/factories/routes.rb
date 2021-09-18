@@ -1,7 +1,7 @@
 FactoryBot.define do
   factory :route do
-    starting_adress { "Aleje Solidarności 47, Poznań, Polska" }
-    destination_adress { "Pleszewska 1, Poznań, Polska" }
-    distance { 5.00 }
+    starting_adress { Faker::Address.full_address }
+    destination_adress { Faker::Address.full_address }
+    distance { 5 }
   end
 end

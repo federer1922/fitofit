@@ -1,4 +1,5 @@
 <div class="container">
+<h5 style="font-weight: bold">Add new route</h5>
   <div class="row">
     <div class="col">
       <form action="/create">
@@ -13,41 +14,26 @@
     </div>   
   </div>
 </div>
+<p>&nbsp;</p>
 
-<p></p>
 
 <div class="container">
-  <div class="row">
-    <div class="col-sm-2">
-      <p class="font-weight-bold">Date</p>
-    </div>
-    <div class="col-sm-3">
-      <p class="font-weight-bold">Start</p>
-    </div>
-    <div class="col-sm-3">
-      <p class="font-weight-bold">Destination</p>
-    </div>
-    <div class="col-sm-3">
-      <p class="font-weight-bold">Distance</p>
-    </div>
-  </div>
-</div>
+<h5 style="font-weight: bold">Routes during <%= @date_for_present_month.strftime("%B %Y") %></h5>
+<p></p>
 
-<div class="container"> 
-  <% @routes.each do |route| %>
-    <div class="row">
-      <div class="col-sm-2">
-        <%= route.created_at.to_date %>
-      </div>
-      <div class="col-sm-3">
-        <%= route.starting_adress %>
-      </div>
-      <div class="col-sm-3">
-        <%= route.destination_adress %>
-      </div>
-       <div class="col-sm-3">
-        <%= route.distance %>
-      </div>
-    </div>
-  <% end %>
-</div>
+<table class="table table-bordered text-center">
+<thead>
+   <tr>
+     <th scope="col" style="width: 50%">Date</th>
+     <th scope="col">Distance traveled</th>
+   </tr>
+ </thead>
+ <tbody>
+ <% @routes.each do |route| %>
+   <tr>
+     <td><%= route[0] %></td>
+     <td><%= route[1] %> km</td>
+   </tr>
+<% end %>
+ </tbody>
+</table>

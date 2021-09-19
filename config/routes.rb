@@ -5,4 +5,5 @@ Rails.application.routes.draw do
   get '/create', to: 'routes#create'
   get '/show_month', to: 'routes#show_month_details'
   get '/show_day', to: 'routes#show_day_details'
+  get '/destroy', to: 'routes#destroy'
 end

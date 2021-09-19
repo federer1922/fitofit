@@ -38,4 +38,25 @@ class RoutesController < ApplicationController
     @date = Date.parse(params["day"])
     @routes = Route.where(created_at: @date.beginning_of_day..@date.end_of_day)
   end
+
+  def destroy
+    route = Route.find params["route_id"]
+    route.destroy!
+
+    if params["click_source"] == "show_month_details"
+      if Route.where(created_at: route.created_at.beginning_of_month..route.created_at.end_of_month).count == 0 
+        flash[:alert] = "No routes for this month, back to the main site"
+        redirect_to action: "index" 
+      else
+        redirect_to action: "show_month_details", params: { day: params["day"] }
+      end
+    else
+      if Route.where(created_at: route.created_at.beginning_of_day..route.created_at.end_of_day).count == 0
+        flash[:alert] = "No routes for this day, back to the main site"
+        redirect_to action: "index"
+      else
+        redirect_to action: "show_day_details", params: { day: params["day"] }
+      end
+    end
+  end
 end

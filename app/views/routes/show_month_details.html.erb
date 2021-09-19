@@ -5,10 +5,11 @@
   <table class="table table-bordered text-center">
   <thead>
     <tr>
-      <th scope="col" style="width: 20%">Date</th>
-      <th scope="col" style="width: 30%">Starting adress</th>
-      <th scope="col" style="width: 30%">Destination address</th>
-      <th scope="col">Distance traveled</th>
+      <th scope="col" style="width: 15%">Date</th>
+      <th scope="col" style="width: 25%">Starting adress</th>
+      <th scope="col" style="width: 25%">Destination address</th>
+      <th scope="col" style="width: 15%">Distance traveled</th>
+      <th scope="col">Actions</th>
     </tr>
   </thead>
   <tbody>
@@ -18,6 +19,12 @@
       <td><%= route.starting_adress %></td>
       <td><%= route.destination_adress %></td>
       <td><%= route.distance %> km</td>
+      <td><form class="form-inline" action="/destroy" style="display: inline;">
+        <input type="hidden" name="route_id" value="<%= route.id %>">
+        <input type="hidden" name="click_source" value="show_month_details">
+        <input type="hidden" name="day" value="<%= @date_for_month %>">
+        <button type="submit" class="btn btn-dark btn-sm">Remove route</button>
+      </form></td>
     </tr>
   <% end %>
   </tbody>

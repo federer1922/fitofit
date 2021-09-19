@@ -6,4 +6,8 @@ Rails.application.routes.draw do
   get '/show_month', to: 'routes#show_month_details'
   get '/show_day', to: 'routes#show_day_details'
   get '/destroy', to: 'routes#destroy'
+  get '/edit_month', to: 'routes#edit_month'
+  get '/update_month', to: 'routes#update_month'
+  get '/edit_day', to: 'routes#edit_day'
+  get '/update_day', to: 'routes#update_day'
 end

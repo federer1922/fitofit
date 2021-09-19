@@ -3,8 +3,8 @@ require "rails_helper"
 RSpec.describe Route, type: :request do
   let(:starting_adress) { "Aleje Solidarności 47, Poznań, Polska" }
   let(:destination_adress) { "Pleszewska 1, Poznań, Polska" }
-  let!(:route_1) { FactoryBot.create(:route)}
-  let!(:route_2) { FactoryBot.create(:route)}
+  let!(:route_1) { FactoryBot.create(:route, created_at: Date.today)}
+  let!(:route_2) { FactoryBot.create(:route, created_at: Date.today)}
   let!(:route_3) { FactoryBot.create(:route, created_at: Date.today.ago(1.month))}
 
   before do
@@ -179,6 +179,68 @@ RSpec.describe Route, type: :request do
 
       expect(response).to redirect_to(root_path)
       expect(flash[:alert]).to eq "No routes for this day, back to the main site"
+    end
+  end
+
+  describe "GET /edit_month" do
+    it "renders a successful response" do
+      get edit_month_path, params: { route_id: route_1.id }
+
+      expect(response).to be_successful
+    end
+
+    it "response has correct body" do
+      get edit_month_path, params: { route_id: route_1.id }
+
+      expect(response.body).to include route_1.starting_adress
+      expect(response.body).to include route_1.destination_adress
+    end
+  end
+
+  describe "GET /update_month" do
+    it "updates route" do
+      get update_month_path, params: { route_id: route_1.id, starting_adress: starting_adress, destination_adress: destination_adress }
+
+      expect(route_1.reload.starting_adress).to eq starting_adress
+      expect(route_1.reload.destination_adress).to eq destination_adress
+      expect(flash[:notice]).to eq "Route successfully updated"
+    end
+
+    it "doesn't upadate route with invalid paramas" do
+      get update_month_path, params: { route_id: route_1.id, starting_adress: nil }
+
+      expect(flash[:alert]).to eq "Starting adress can't be blank"
+    end
+  end
+
+  describe "GET /edit_day" do
+    it "renders a successful response" do
+      get edit_day_path, params: { route_id: route_1.id }
+
+      expect(response).to be_successful
+    end
+
+    it "response has correct body" do
+      get edit_day_path, params: { route_id: route_1.id }
+
+      expect(response.body).to include route_1.starting_adress
+      expect(response.body).to include route_1.destination_adress
+    end
+  end
+
+  describe "GET /update_day" do
+    it "updates route" do
+      get update_day_path, params: { route_id: route_1.id, starting_adress: starting_adress, destination_adress: destination_adress }
+
+      expect(route_1.reload.starting_adress).to eq starting_adress
+      expect(route_1.reload.destination_adress).to eq destination_adress
+      expect(flash[:notice]).to eq "Route successfully updated"
+    end
+
+    it "doesn't upadate route with invalid paramas" do
+      get update_day_path, params: { route_id: route_1.id, starting_adress: nil }
+
+      expect(flash[:alert]).to eq "Starting adress can't be blank"
     end
   end
 end

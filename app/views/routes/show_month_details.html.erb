@@ -19,12 +19,15 @@
       <td><%= route.starting_adress %></td>
       <td><%= route.destination_adress %></td>
       <td><%= route.distance %> km</td>
-      <td><form class="form-inline" action="/destroy" style="display: inline;">
+      <td>
+      <%= link_to "Edit route", edit_month_path(route_id: route.id), method: "get", class: "btn btn-info btn-sm" %>
+      <form class="form-inline" action="/destroy" style="display: inline;">
         <input type="hidden" name="route_id" value="<%= route.id %>">
         <input type="hidden" name="click_source" value="show_month_details">
         <input type="hidden" name="day" value="<%= @date_for_month %>">
         <button type="submit" class="btn btn-dark btn-sm">Remove route</button>
-      </form></td>
+      </form>
+      </td>
     </tr>
   <% end %>
   </tbody>

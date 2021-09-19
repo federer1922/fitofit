@@ -3,4 +3,5 @@ Rails.application.routes.draw do
   root to: "routes#index"
 
   get '/create', to: 'routes#create'
+  get '/show_month', to: 'routes#show_month_details'
 end

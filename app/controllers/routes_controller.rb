@@ -26,4 +26,11 @@ class RoutesController < ApplicationController
       flash.now[:alert] = "No routes for this month" 
     end
   end
+
+  def show_month_details
+    @date_for_month = Date.parse(params["day"])
+    first_date_for_month = @date_for_month.beginning_of_month
+    last_date_for_month = @date_for_month.end_of_month
+    @routes = Route.where(created_at: first_date_for_month..last_date_for_month)
+  end
 end

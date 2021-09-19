@@ -3,9 +3,9 @@ require "rails_helper"
 RSpec.describe Route, type: :request do
   let(:starting_adress) { "Aleje Solidarności 47, Poznań, Polska" }
   let(:destination_adress) { "Pleszewska 1, Poznań, Polska" }
-  let(:route_1) { FactoryBot.create(:route) }
-  let(:route_2) { FactoryBot.create(:route) }
-  let(:route_3) { FactoryBot.create(:route, created_at: Date.today.ago(1.month)) }
+  let!(:route_1) { FactoryBot.create(:route)}
+  let!(:route_2) { FactoryBot.create(:route)}
+  let!(:route_3) { FactoryBot.create(:route, created_at: Date.today.ago(1.month))}
 
   before do
     Geocoder.configure(:lookup => :test)
@@ -56,14 +56,15 @@ RSpec.describe Route, type: :request do
     end
 
     it "response has correct body" do
-      route_1; route_2; route_3
       get root_path
 
-      expect(response.body).to include "10.0 km"
-      expect(response.body).to include "#{Date.today.strftime("%B %Y")}"
+      expect(response.body).to include (route_1.distance + route_2.distance).to_s
+      expect(response.body).to include route_1.created_at.strftime("%d %B")
+      expect(response.body).to_not include route_3.created_at.strftime("%d %B")
     end
 
     it "flash alert if no routes" do
+      Route.destroy_all
       get root_path
 
       expect(flash[:alert]).to eq "No routes for this month"
@@ -97,6 +98,23 @@ RSpec.describe Route, type: :request do
         expect(response).to redirect_to(root_path)
         expect(flash[:alert]).to eq "Destination adress can't be blank"
       end
+    end
+  end
+
+  describe "GET /show_month" do
+    it "renders a successful response" do
+      get show_month_path, params: { day: Date.today }
+
+      expect(response).to be_successful
+    end
+
+    it "response has correct body" do
+      get show_month_path, params: { day: Date.today }
+
+      expect(response.body).to include route_1.starting_adress
+      expect(response.body).to include route_1.created_at.strftime("%d %B")
+      expect(response.body).to_not include route_3.starting_adress
+      expect(response.body).to_not include route_3.created_at.strftime("%d %B")
     end
   end
 end

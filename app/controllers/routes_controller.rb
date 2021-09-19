@@ -33,4 +33,9 @@ class RoutesController < ApplicationController
     last_date_for_month = @date_for_month.end_of_month
     @routes = Route.where(created_at: first_date_for_month..last_date_for_month)
   end
+
+  def show_day_details
+    @date = Date.parse(params["day"])
+    @routes = Route.where(created_at: @date.beginning_of_day..@date.end_of_day)
+  end
 end

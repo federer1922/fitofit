@@ -1,6 +1,5 @@
 ## FITOFIT
 
-
 # Setup
 docker-compose create
 

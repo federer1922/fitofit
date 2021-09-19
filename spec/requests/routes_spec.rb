@@ -117,4 +117,19 @@ RSpec.describe Route, type: :request do
       expect(response.body).to_not include route_3.created_at.strftime("%d %B")
     end
   end
+  describe "GET /show_day" do
+    it "renders a successful response" do
+      get show_day_path, params: { day: Date.today }
+
+      expect(response).to be_successful
+    end
+
+    it "response has correct body" do
+      get show_day_path, params: { day: Date.today }
+
+      expect(response.body).to include route_1.starting_adress
+      expect(response.body).to include route_1.distance.to_s
+      expect(response.body).to_not include route_3.starting_adress
+    end
+  end
 end

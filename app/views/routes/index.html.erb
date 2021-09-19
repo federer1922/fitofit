@@ -30,10 +30,10 @@
   <tbody>
   <% @routes.each do |route| %>
     <tr>
-      <td><%= route[0] %></td>
+      <td><%= link_to route[0], show_day_path(day: route[0]), method: "get", class: "text-dark" %></td>
       <td><%= route[1] %> km</td>
     </tr>
-  <% end  %>
+  <% end %>
   </tbody>
   </table>
 </div>

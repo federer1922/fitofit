@@ -1,0 +1,33 @@
+<div class="container">
+  <h5 style="font-weight: bold">Routes during <%= @date.strftime("%d %B %Y") %></h5>
+  <p></p>
+
+  <table class="table table-bordered text-center">
+  <thead>
+    <tr>
+      <th scope="col" style="width: 35%">Starting adress</th>
+      <th scope="col" style="width: 35%">Destination address</th>
+      <th scope="col">Distance traveled</th>
+    </tr>
+  </thead>
+  <tbody>
+  <% @routes.each do |route| %>
+    <tr>
+      <td><%= route.starting_adress %></td>
+      <td><%= route.destination_adress %></td>
+      <td><%= route.distance %> km</td>
+    </tr>
+  <% end %>
+  </tbody>
+  </table>
+</div>
+
+<div class="container">
+  <div class="row">
+    <div class="col">
+    <div class="text-right">
+      <%= link_to "Go to the main site", root_path, method: "get", class: "btn btn-success" %>
+      </div>
+    </div>   
+  </div>
+</div>

@@ -14,10 +14,12 @@
     </div>   
   </div>
 </div>
+
 <p>&nbsp;</p>
+
 <% if @routes.count != 0 %>
   <div class="container">
-  <h5 style="font-weight: bold">Routes during <%= @date_for_present_month.strftime("%B %Y") %></h5>
+  <h5 style="font-weight: bold">Routes during <%= @date_for_chosen_month.strftime("%B %Y") %></h5>
   <p></p>
  
   <table class="table table-bordered text-center">
@@ -41,11 +43,32 @@
     <div class="row">
       <div class="col">
         <form action="/show_month" >
-          <input type="hidden" name="day" value="<%= @date_for_present_month %>">
+          <input type="hidden" name="day" value="<%= @date_for_chosen_month %>">
           <button type="submit" style="float: right;" class="btn btn-info">Month details</button>
         </form>
       </div>   
     </div>
   </div>
 <% end %>
+
+<p>&nbsp;</p>
+
+<div class="container">
+  <div class="col text-center">
+    <form class="form-inline" action="/" style="display: inline;">
+      <input type="hidden" name="month" value="<%= @routes_for_previous_month %>">
+      <button type="submit" style="float: left;" class="btn btn-danger">Previous month routes</button>
+    </form>
+    <form class="form-inline" action="/" style="display: inline;">
+      <input type="hidden" name="month" value="<%= @routes_for_present_month %>">
+      <button type="submit" style="float: none;" class="btn btn-secondary">Present month routes</button>
+    </form>  
+    <form class="form-inline" action="/" style="display: inline;">
+      <input type="hidden" name="month" value="<%= @routes_for_next_month %>">
+      <button type="submit" style="float: right;" class="btn btn-warning">Next month routes</button>
+    </form>  
+  </div>
+</div>
+
+
 

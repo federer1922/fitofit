@@ -16,9 +16,13 @@ class RoutesController < ApplicationController
   end
 
   def index
-    @date_for_present_month = Date.today
-    first_date_for_month = @date_for_present_month.beginning_of_month
-    last_date_for_month = @date_for_present_month.end_of_month
+    @date_for_chosen_month = Date.parse(params["month"]) rescue Date.today  
+    first_date_for_month = @date_for_chosen_month.beginning_of_month
+    last_date_for_month = @date_for_chosen_month.end_of_month
+
+    @routes_for_next_month = last_date_for_month + 1
+    @routes_for_previous_month = first_date_for_month - 1
+    @routes_for_present_month = Date.today
 
     routes = Route.where(created_at: first_date_for_month..last_date_for_month)
     @routes = DayDistances.call(routes)
@@ -48,6 +52,8 @@ class RoutesController < ApplicationController
         flash[:alert] = "No routes for this month, back to the main site"
         redirect_to action: "index" 
       else
+        flash[:notice] = "Route successfully deleted"
+
         redirect_to action: "show_month_details", params: { day: params["day"] }
       end
     else
@@ -55,6 +61,8 @@ class RoutesController < ApplicationController
         flash[:alert] = "No routes for this day, back to the main site"
         redirect_to action: "index"
       else
+        flash[:notice] = "Route successfully deleted"
+
         redirect_to action: "show_day_details", params: { day: params["day"] }
       end
     end

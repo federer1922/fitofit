@@ -64,11 +64,20 @@ RSpec.describe Route, type: :request do
     end
 
     it "flash alert if no routes" do
-      Route.destroy_all
-      get root_path
+      get root_path, params: { month: Date.today.since(1.month) }
 
       expect(flash[:alert]).to eq "No routes for this month"
     end
+
+    it "shows routes for previous month" do
+      get root_path, params: { month: Date.today.ago(1.month) }
+
+      expect(response.body).to include route_3.distance.to_s
+      expect(response.body).to include route_3.created_at.strftime("%d %B")
+      expect(response.body).to_not include route_1.created_at.strftime("%d %B")
+    end
+
+
   end
 
   describe "GET /create" do
@@ -148,6 +157,7 @@ RSpec.describe Route, type: :request do
       get destroy_path, params: { route_id: route_1.id, click_source: "show_month_details" }
 
       expect(response).to redirect_to(show_month_path)
+      expect(flash[:notice]).to eq "Route successfully deleted"
     end
 
     it "redirects to root path with month alert" do
@@ -171,6 +181,7 @@ RSpec.describe Route, type: :request do
       get destroy_path, params: { route_id: route_1.id }
 
       expect(response).to redirect_to(show_day_path)
+      expect(flash[:notice]).to eq "Route successfully deleted"
     end
 
     it "redirects to root path with day alert" do

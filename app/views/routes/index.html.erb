@@ -59,14 +59,16 @@
       <input type="hidden" name="month" value="<%= @routes_for_previous_month %>">
       <button type="submit" style="float: left;" class="btn btn-danger">Previous month routes</button>
     </form>
+    <% if (@date_for_chosen_month.beginning_of_month..@date_for_chosen_month.end_of_month).exclude?(Date.today) %> 
     <form class="form-inline" action="/" style="display: inline;">
       <input type="hidden" name="month" value="<%= @routes_for_present_month %>">
       <button type="submit" style="float: none;" class="btn btn-secondary">Present month routes</button>
-    </form>  
+    </form>
     <form class="form-inline" action="/" style="display: inline;">
       <input type="hidden" name="month" value="<%= @routes_for_next_month %>">
       <button type="submit" style="float: right;" class="btn btn-warning">Next month routes</button>
-    </form>  
+    </form> 
+    <% end %> 
   </div>
 </div>
 

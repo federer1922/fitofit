@@ -210,7 +210,7 @@ RSpec.describe Route, type: :request do
 
   describe "GET /update_month" do
     it "updates route" do
-      get update_month_path, params: { route_id: route_1.id, starting_adress: starting_adress, destination_adress: destination_adress }
+      put update_month_path, params: { route_id: route_1.id, starting_adress: starting_adress, destination_adress: destination_adress }
 
       expect(route_1.reload.starting_adress).to eq starting_adress
       expect(route_1.reload.destination_adress).to eq destination_adress
@@ -218,7 +218,7 @@ RSpec.describe Route, type: :request do
     end
 
     it "doesn't upadate route with invalid paramas" do
-      get update_month_path, params: { route_id: route_1.id, starting_adress: nil }
+      put update_month_path, params: { route_id: route_1.id, starting_adress: nil }
 
       expect(flash[:alert]).to eq "Starting adress can't be blank"
     end
@@ -241,7 +241,7 @@ RSpec.describe Route, type: :request do
 
   describe "GET /update_day" do
     it "updates route" do
-      get update_day_path, params: { route_id: route_1.id, starting_adress: starting_adress, destination_adress: destination_adress }
+      put update_day_path, params: { route_id: route_1.id, starting_adress: starting_adress, destination_adress: destination_adress }
 
       expect(route_1.reload.starting_adress).to eq starting_adress
       expect(route_1.reload.destination_adress).to eq destination_adress
@@ -249,7 +249,7 @@ RSpec.describe Route, type: :request do
     end
 
     it "doesn't upadate route with invalid paramas" do
-      get update_day_path, params: { route_id: route_1.id, starting_adress: nil }
+      put update_day_path, params: { route_id: route_1.id, starting_adress: nil }
 
       expect(flash[:alert]).to eq "Starting adress can't be blank"
     end

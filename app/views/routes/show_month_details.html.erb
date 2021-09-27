@@ -21,7 +21,9 @@
       <td><%= route.distance %> km</td>
       <td>
       <%= link_to "Edit route", edit_month_path(route_id: route.id), method: "get", class: "btn btn-info btn-sm" %>
-      <form class="form-inline" action="/destroy" style="display: inline;">
+      <form class="form-inline" action="/destroy" method="post" style="display: inline;">
+        <input type="hidden" value="delete" name="_method">
+        <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token() %>" />
         <input type="hidden" name="route_id" value="<%= route.id %>">
         <input type="hidden" name="click_source" value="show_month_details">
         <input type="hidden" name="day" value="<%= @date_for_month %>">

@@ -148,13 +148,13 @@ RSpec.describe Route, type: :request do
       get show_month_path, params: { day: Date.today }
 
       expect {
-        get destroy_path, params: { route_id: route_1.id }
+        delete destroy_path, params: { route_id: route_1.id }
       }.to change(Route, :count).by(-1)
     end
 
     it "redirects to show month" do
       get show_month_path, params: { day: Date.today }
-      get destroy_path, params: { route_id: route_1.id, click_source: "show_month_details" }
+      delete destroy_path, params: { route_id: route_1.id, click_source: "show_month_details" }
 
       expect(response).to redirect_to(show_month_path)
       expect(flash[:notice]).to eq "Route successfully deleted"
@@ -162,7 +162,7 @@ RSpec.describe Route, type: :request do
 
     it "redirects to root path with month alert" do
       get show_month_path, params: { day: Date.today.ago(1.month) }
-      get destroy_path, params: { route_id: route_3.id, click_source: "show_month_details" }
+      delete destroy_path, params: { route_id: route_3.id, click_source: "show_month_details" }
 
       expect(response).to redirect_to(root_path)
       expect(flash[:alert]).to eq "No routes for this month, back to the main site"
@@ -172,13 +172,13 @@ RSpec.describe Route, type: :request do
       get show_day_path, params: { day: Date.today }
 
       expect {
-        get destroy_path, params: { route_id: route_1.id }
+        delete destroy_path, params: { route_id: route_1.id }
       }.to change(Route, :count).by(-1)
     end
 
     it "redirects to show day" do
       get show_day_path, params: { day: Date.today }
-      get destroy_path, params: { route_id: route_1.id }
+      delete destroy_path, params: { route_id: route_1.id }
 
       expect(response).to redirect_to(show_day_path)
       expect(flash[:notice]).to eq "Route successfully deleted"
@@ -186,7 +186,7 @@ RSpec.describe Route, type: :request do
 
     it "redirects to root path with day alert" do
       get show_day_path, params: { day: Date.today.ago(1.month) }
-      get destroy_path, params: { route_id: route_3.id }
+      delete destroy_path, params: { route_id: route_3.id }
 
       expect(response).to redirect_to(root_path)
       expect(flash[:alert]).to eq "No routes for this day, back to the main site"

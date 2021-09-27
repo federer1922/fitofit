@@ -84,12 +84,12 @@ RSpec.describe Route, type: :request do
     context "with valid parameters" do
       it "creates a new Route" do
         expect {
-          get create_path, params: { starting_adress: starting_adress, destination_adress: destination_adress }
+          post create_path, params: { starting_adress: starting_adress, destination_adress: destination_adress }
         }.to change(Route, :count).by(1)
       end
 
       it "redirects to root_path" do
-        get create_path, params: { starting_adress: starting_adress, destination_adress: destination_adress }
+        post create_path, params: { starting_adress: starting_adress, destination_adress: destination_adress }
         expect(response).to redirect_to(root_path)
       end
     end
@@ -97,12 +97,12 @@ RSpec.describe Route, type: :request do
     context "with invalid parameters" do
       it "does not create a new Route" do
         expect {
-          get create_path, params: { starting_adress: starting_adress, destination_adress: nil }
+          post create_path, params: { starting_adress: starting_adress, destination_adress: nil }
         }.to change(Route, :count).by(0)
       end
 
       it "redirects to root_path with error" do
-        get create_path, params: { starting_adress: starting_adress, destination_adress: nil }
+        post create_path, params: { starting_adress: starting_adress, destination_adress: nil }
 
         expect(response).to redirect_to(root_path)
         expect(flash[:alert]).to eq "Destination adress can't be blank"

@@ -3,6 +3,7 @@ require "rails_helper"
 RSpec.describe Route, type: :request do
   let(:starting_adress) { "Aleje Solidarności 47, Poznań, Polska" }
   let(:destination_adress) { "Pleszewska 1, Poznań, Polska" }
+  let(:invalid_adress) { "Invalid adress" }
   let!(:route_1) { FactoryBot.create(:route, created_at: Date.today)}
   let!(:route_2) { FactoryBot.create(:route, created_at: Date.today)}
   let!(:route_3) { FactoryBot.create(:route, created_at: Date.today.ago(1.month))}
@@ -46,6 +47,9 @@ RSpec.describe Route, type: :request do
         }
       ]
     )
+
+    Geocoder::Lookup::Test.add_stub(invalid_adress, [])
+  
   end
 
   describe "GET /root" do
@@ -59,8 +63,8 @@ RSpec.describe Route, type: :request do
       get root_path
 
       expect(response.body).to include (route_1.distance + route_2.distance).to_s
-      expect(response.body).to include route_1.created_at.strftime("%d %B")
-      expect(response.body).to_not include route_3.created_at.strftime("%d %B")
+      expect(response.body).to include route_1.created_at.strftime("%-d %B")
+      expect(response.body).to_not include route_3.created_at.strftime("-%-d %B")
     end
 
     it "flash alert if no routes" do
@@ -73,14 +77,14 @@ RSpec.describe Route, type: :request do
       get root_path, params: { month: Date.today.ago(1.month) }
 
       expect(response.body).to include route_3.distance.to_s
-      expect(response.body).to include route_3.created_at.strftime("%d %B")
-      expect(response.body).to_not include route_1.created_at.strftime("%d %B")
+      expect(response.body).to include route_3.created_at.strftime("%-d %B")
+      expect(response.body).to_not include route_1.created_at.strftime("%-d %B")
     end
 
 
   end
 
-  describe "GET /create" do
+  describe "POST /create" do
     context "with valid parameters" do
       it "creates a new Route" do
         expect {
@@ -101,11 +105,18 @@ RSpec.describe Route, type: :request do
         }.to change(Route, :count).by(0)
       end
 
-      it "redirects to root_path with error" do
+      it "shows error if adress is not entered" do
         post create_path, params: { starting_adress: starting_adress, destination_adress: nil }
 
         expect(response).to redirect_to(root_path)
         expect(flash[:alert]).to eq "Destination adress can't be blank"
+      end
+
+      it "shows error if entered adress is invalid" do
+        post create_path, params: { starting_adress: invalid_adress, destination_adress: destination_adress }
+
+        expect(response).to redirect_to(root_path)
+        expect(flash[:alert]).to eq "Invalid addresses, enter again"
       end
     end
   end
@@ -121,9 +132,9 @@ RSpec.describe Route, type: :request do
       get show_month_path, params: { day: Date.today }
 
       expect(response.body).to include route_1.starting_adress
-      expect(response.body).to include route_1.created_at.strftime("%d %B")
+      expect(response.body).to include route_1.created_at.strftime("%-d %B")
       expect(response.body).to_not include route_3.starting_adress
-      expect(response.body).to_not include route_3.created_at.strftime("%d %B")
+      expect(response.body).to_not include route_3.created_at.strftime("%-d %B")
     end
   end
 
@@ -208,7 +219,7 @@ RSpec.describe Route, type: :request do
     end
   end
 
-  describe "GET /update_month" do
+  describe "PUT /update_month" do
     it "updates route" do
       put update_month_path, params: { route_id: route_1.id, starting_adress: starting_adress, destination_adress: destination_adress }
 
@@ -217,10 +228,18 @@ RSpec.describe Route, type: :request do
       expect(flash[:notice]).to eq "Route successfully updated"
     end
 
-    it "doesn't upadate route with invalid paramas" do
-      put update_month_path, params: { route_id: route_1.id, starting_adress: nil }
+    context "doesn't upadate route" do
+      it "and shows error if adress is not entered" do
+        put update_month_path, params: { route_id: route_1.id, starting_adress: nil, destination_adress: destination_adress }
 
-      expect(flash[:alert]).to eq "Starting adress can't be blank"
+        expect(flash[:alert]).to eq "Starting adress can't be blank"
+      end
+
+      it "and shows error if entered adress is invalid" do
+        put update_month_path, params: { route_id: route_1.id, starting_adress: invalid_adress, destination_adress: destination_adress }
+
+        expect(flash[:alert]).to eq "Invalid addresses, enter again"
+      end
     end
   end
 
@@ -239,7 +258,7 @@ RSpec.describe Route, type: :request do
     end
   end
 
-  describe "GET /update_day" do
+  describe "PUT /update_day" do
     it "updates route" do
       put update_day_path, params: { route_id: route_1.id, starting_adress: starting_adress, destination_adress: destination_adress }
 
@@ -248,10 +267,18 @@ RSpec.describe Route, type: :request do
       expect(flash[:notice]).to eq "Route successfully updated"
     end
 
-    it "doesn't upadate route with invalid paramas" do
-      put update_day_path, params: { route_id: route_1.id, starting_adress: nil }
+    context "doesn't upadate route" do
+      it "and shows error if adress is not entered" do
+        put update_day_path, params: { route_id: route_1.id, starting_adress: nil, destination_adress: destination_adress }
+  
+        expect(flash[:alert]).to eq "Starting adress can't be blank"
+      end
+      
+      it "and shows error if entered adress is invalid" do
+        put update_day_path, params: { route_id: route_1.id, starting_adress: invalid_adress, destination_adress: destination_adress }
 
-      expect(flash[:alert]).to eq "Starting adress can't be blank"
+        expect(flash[:alert]).to eq "Invalid addresses, enter again"
+      end
     end
   end
 end

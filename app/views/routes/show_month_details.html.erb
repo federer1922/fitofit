@@ -15,7 +15,7 @@
   <tbody>
   <% @routes.each do |route| %>
     <tr>
-      <td><%= route.created_at.strftime("%d %B") %></td>
+      <td><%= route.created_at.strftime("%-d %B") %></td>
       <td><%= route.starting_adress %></td>
       <td><%= route.destination_adress %></td>
       <td><%= route.distance %> km</td>

@@ -5,12 +5,15 @@ class RoutesController < ApplicationController
     route.destination_adress = params["destination_adress"]  
     if route.valid?
       route.distance = CalculateDistance.call(route.starting_adress, route.destination_adress)
-      route.save!  
-   
-      redirect_to action: "index"
+      if route.distance.present?
+        route.save!
+        redirect_to action: "index"
+      else
+        flash[:alert] = "Invalid addresses, enter again"
+        redirect_to action: "index"
+      end
     else
       flash[:alert] = route.errors.full_messages.first
-
       redirect_to action: "index"
     end
   end
@@ -53,7 +56,6 @@ class RoutesController < ApplicationController
         redirect_to action: "index" 
       else
         flash[:notice] = "Route successfully deleted"
-
         redirect_to action: "show_month_details", params: { day: params["day"] }
       end
     else
@@ -78,15 +80,17 @@ class RoutesController < ApplicationController
     route.destination_adress = params["destination_adress"]
     if route.valid?
       route.distance = CalculateDistance.call(route.starting_adress, route.destination_adress)
-      route.save!  
-
-      flash[:notice] = "Route successfully updated"
-
-      redirect_to action: "show_month_details", params: { day: route.created_at }
+      if route.distance.present?
+        route.save!
+        flash[:notice] = "Route successfully updated"
+        redirect_to action: "show_month_details", params: { day: route.created_at }
+      else
+        flash[:alert] = "Invalid addresses, enter again"
+        redirect_to action: "edit_month", params: { route_id: route.id }
+      end
     else
        flash[:alert] = route.errors.full_messages.first
-
-      redirect_to action: "edit_month", params: { route_id: route.id }
+       redirect_to action: "edit_month", params: { route_id: route.id }
     end
     end
 
@@ -101,14 +105,16 @@ class RoutesController < ApplicationController
     route.destination_adress = params["destination_adress"]
     if route.valid?
       route.distance = CalculateDistance.call(route.starting_adress, route.destination_adress)
-      route.save!  
-
-      flash[:notice] = "Route successfully updated"
-
-      redirect_to action: "show_day_details", params: { day: route.created_at }
+      if route.distance.present?
+        route.save!    
+        flash[:notice] = "Route successfully updated"
+        redirect_to action: "show_day_details", params: { day: route.created_at }
+      else
+        flash[:alert] = "Invalid addresses, enter again"
+        redirect_to action: "edit_day", params: { route_id: route.id }
+      end
     else
-       flash[:alert] = route.errors.full_messages.first
-
+      flash[:alert] = route.errors.full_messages.first
       redirect_to action: "edit_day", params: { route_id: route.id }
     end
   end
